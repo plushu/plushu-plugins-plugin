@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
 
-# If a plugin name was specified
-if [[ -n $2 ]]; then
+# If no plugin name was specified
+if [[ -z "$2" ]]; then
+  echo "Missing name of plugin to uninstall" >&2
+  exit 1
+fi
 
+# For each plugin specified
+while [[ -n "$2" ]]; do
   # If that plugin exists
   if [[ -d "$PLUSHU_ROOT/plugins/$2" ]]; then
 
@@ -21,12 +26,9 @@ if [[ -n $2 ]]; then
 
   # If that plugin does not exist
   else
-    echo "Plugin '$2' not found" >&2
+    echo "Plugin not found: $2" >&2
     exit 1
   fi
 
 # If no plugin name was specified
-else
-  echo "Missing name of plugin to uninstall" >&2
-  exit 1
-fi
+done
