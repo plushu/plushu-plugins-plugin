@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+# If at least one plugin name was specified
+if [[ -n "$2" ]]; then
+  shift
+  plugins=()
+  # For each plugin specified
+  while [[ -n "$2" ]]; do
+    # If that plugin exists
+    if [[ -d "$PLUSHU_ROOT/plugins/$2" ]]; then
+      # Add it to the update list
+      plugins+=("$PLUSHU_ROOT/plugins/$2")
+
+    # If that plugin does not exist
+    else
+      echo "Plugin not found: $2" >&2
+      exit 1
+    fi
+  done
+# If no plugin name was specified
+else
+  # Update ALL the plugins
+  plugins=("$PLUSHU_ROOT/plugins"/*)
+fi
+
+# For each plugin specified
+for plugin in "${plugins[@]}"; do (
+  # Pull new revisions
+  cd "$plugin"
+  git fetch
+  old_rev="$(git rev-parse HEAD)"
+  new_rev="$(git rev-parse @{u})"
+
+  # If there are new upstream revisions
+  if [[ "$old_rev" != "$new_rev" ]]; then
+    # merge them
+    git merge @{u}
+
+    # If this plugin has an update script
+    if [[ -f ./update ]]; then
+
+      # We don't test for executable status, we just
+      # let the shell fail if the update script isn't set executable
+      PLUSHU_PLUGIN_NAME="${PWD##*/}" ./update "$old_rev" "$new_rev"
+    fi
+  fi
+) done
