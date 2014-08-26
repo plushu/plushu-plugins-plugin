@@ -28,8 +28,8 @@ if [[ -n $2 ]]; then
   if [[ -e "$PLUSHU_ROOT/plugins/$target" ]]; then
     cat >&2 <<EOF
 Plugin '$target' is already installed.
-Use \`plushu reinstall $target\` to rerun its install script,
-or \`plushu uninstall $target\` first if you want to do a hard reinstall.
+Use \`plushu $PLUSHU_PLUGIN_NAME:reinstall $target\` to rerun its install script,
+or \`plushu $PLUSHU_PLUGIN_NAME:uninstall $target\` first if you want to do a hard reinstall.
 EOF
     exit 1
 
