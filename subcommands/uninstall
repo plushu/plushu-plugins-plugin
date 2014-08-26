@@ -29,6 +29,6 @@ while [[ -n "$2" ]]; do
     echo "Plugin not found: $2" >&2
     exit 1
   fi
-
+  shift
 # If no plugin name was specified
 done
