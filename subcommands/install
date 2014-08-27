@@ -40,7 +40,7 @@ EOF
     # When installing as root, give the plushu user ownership of everything
     # within the newly-cloned plugin
     if [[ "$EUID" == 0 ]]; then
-      chown -R plushu "$PLUSHU_ROOT/plugins/$target"
+      chown -R "$PLUSHU_USER" "$PLUSHU_ROOT/plugins/$target"
     fi
 
     # If the newly-cloned plugin has an install script
