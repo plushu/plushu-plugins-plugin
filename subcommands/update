@@ -34,6 +34,7 @@ for plugin in "${plugins[@]}"; do (
 
   # If there are new upstream revisions
   if [[ "$old_rev" != "$new_rev" ]]; then
+    echo "Updating ${plugin##*/}..."
     # merge them
     git merge @{u}
 
@@ -45,6 +46,6 @@ for plugin in "${plugins[@]}"; do (
       PLUSHU_PLUGIN_NAME="${PWD##*/}" ./update "$old_rev" "$new_rev"
     fi
   else
-    echo "$plugin is up to date"
+    echo "${plugin##*/} is up to date"
   fi
 ) done
