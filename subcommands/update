@@ -44,5 +44,7 @@ for plugin in "${plugins[@]}"; do (
       # let the shell fail if the update script isn't set executable
       PLUSHU_PLUGIN_NAME="${PWD##*/}" ./update "$old_rev" "$new_rev"
     fi
+  else
+    echo "$plugin is up to date"
   fi
 ) done
