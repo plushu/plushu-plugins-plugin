@@ -3,7 +3,6 @@ set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
 
 # If at least one plugin name was specified
 if [[ -n "$2" ]]; then
-  shift
   plugins=()
   # For each plugin specified
   while [[ -n "$2" ]]; do
@@ -17,6 +16,7 @@ if [[ -n "$2" ]]; then
       echo "Plugin not found: $2" >&2
       exit 1
     fi
+    shift
   done
 # If no plugin name was specified
 else
