@@ -25,7 +25,7 @@ else
 fi
 
 # For each plugin specified
-for plugin in "${plugins[@]}"; do (
+for plugin in "${plugins[@]}"; do if [[ -d "$plugin/.git" ]]; then (
   # Pull new revisions
   cd "$plugin"
   git fetch >/dev/null 2>&1
@@ -48,4 +48,4 @@ for plugin in "${plugins[@]}"; do (
   else
     echo "${plugin##*/} is up to date"
   fi
-) done
+) fi done
