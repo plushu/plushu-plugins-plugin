@@ -28,7 +28,7 @@ fi
 for plugin in "${plugins[@]}"; do (
   # Pull new revisions
   cd "$plugin"
-  git fetch
+  git fetch >/dev/null 2>&1
   old_rev="$(git rev-parse HEAD)"
   new_rev="$(git rev-parse @{u})"
 
