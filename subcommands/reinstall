@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
 
+plugins_dir=$PLUSHU_PLUGINS_ROOT/plugins
+
 # If no plugin name was specified
 if [[ -z "$2" ]]; then
   echo "Missing name of plugin to reinstall" >&2
@@ -10,14 +12,15 @@ fi
 # For each plugin specified
 while [[ -n "$2" ]]; do
   # If that plugin exists
-  if [[ -d "$PLUSHU_ROOT/plugins/$2" ]]; then
+  if [[ -d "$plugins_dir/$2" ]]; then
 
     # If that plugin has an install script
-    if [[ -f "$PLUSHU_ROOT/plugins/$2/install" ]]; then
+    if [[ -f "$plugins_dir/$2/install" ]]; then
 
       # We don't test for executable status, we just
       # let the shell fail if the install script isn't set executable
-      PLUSHU_PLUGIN_NAME="$2" "$PLUSHU_ROOT/plugins/$2/install"
+      PLUSHU_PLUGIN_NAME="$2" PLUSHU_PLUGIN_PATH="$plugins_dir/$2" \
+        "$plugins_dir/$2/install"
     fi
 
   # If that plugin does not exist

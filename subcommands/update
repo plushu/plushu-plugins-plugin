@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
 
+plugins_dir=$PLUSHU_PLUGINS_ROOT/plugins
+
 # If at least one plugin name was specified
 if [[ -n "$2" ]]; then
   plugins=()
   # For each plugin specified
   while [[ -n "$2" ]]; do
     # If that plugin exists
-    if [[ -d "$PLUSHU_ROOT/plugins/$2" ]]; then
+    if [[ -d "$plugins_dir/$2" ]]; then
       # Add it to the update list
-      plugins+=("$PLUSHU_ROOT/plugins/$2")
+      plugins+=("$plugins_dir/$2")
 
     # If that plugin does not exist
     else
@@ -21,7 +23,7 @@ if [[ -n "$2" ]]; then
 # If no plugin name was specified
 else
   # Update ALL the plugins
-  plugins=("$PLUSHU_ROOT/plugins"/*)
+  plugins=("$plugins_dir"/*)
 fi
 
 # For each plugin specified
@@ -43,7 +45,8 @@ for plugin in "${plugins[@]}"; do if [[ -d "$plugin/.git" ]]; then (
 
       # We don't test for executable status, we just
       # let the shell fail if the update script isn't set executable
-      PLUSHU_PLUGIN_NAME="${PWD##*/}" ./update "$old_rev" "$new_rev"
+      PLUSHU_PLUGIN_NAME="${PWD##*/}" PLUSHU_PLUGIN_PATH="$PWD" \
+        ./update "$old_rev" "$new_rev"
     fi
   else
     echo "${plugin##*/} is up to date"

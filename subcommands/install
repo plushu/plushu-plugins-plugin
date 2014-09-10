@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
 
+plugins_dir=$PLUSHU_PLUGINS_ROOT/plugins
+
 # If a plugin name was specified
 if [[ -n $2 ]]; then
 
@@ -25,7 +27,7 @@ if [[ -n $2 ]]; then
   target=${3:-$defname}
 
   # If the plugin already exists
-  if [[ -e "$PLUSHU_ROOT/plugins/$target" ]]; then
+  if [[ -e "$plugins_dir/$target" ]]; then
     cat >&2 <<EOF
 Plugin '$target' is already installed.
 Use \`plushu $PLUSHU_PLUGIN_NAME:reinstall $target\` to rerun its install script,
@@ -35,20 +37,21 @@ EOF
 
   # If the plugin isn't already installed
   else
-    git clone $remote "$PLUSHU_ROOT/plugins/$target"
+    git clone $remote "$plugins_dir/$target"
 
     # When installing as root, give the plushu user ownership of everything
     # within the newly-cloned plugin
     if [[ "$EUID" == 0 ]]; then
-      chown -R "$PLUSHU_USER" "$PLUSHU_ROOT/plugins/$target"
+      chown -R "$PLUSHU_USER" "$plugins_dir/$target"
     fi
 
     # If the newly-cloned plugin has an install script
-    if [[ -f "$PLUSHU_ROOT/plugins/$target/install" ]]; then
+    if [[ -f "$plugins_dir/$target/install" ]]; then
 
       # We don't test for executable status, we just
       # let the shell fail if the install script isn't set executable
-      PLUSHU_PLUGIN_NAME="$target" "$PLUSHU_ROOT/plugins/$target/install"
+      PLUSHU_PLUGIN_NAME="$target" PLUSHU_PLUGIN_PATH="$plugins_dir/$target" \
+        "$plugins_dir/$target/install"
 
     else
       # Notify that the plugin has been installed
