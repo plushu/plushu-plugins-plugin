@@ -27,5 +27,3 @@ Re-runs a plugin's `install` script (if any).
 Usage: `plushu plugins:uninstall <plugin>`
 
 Runs any `uninstall` script for the plugin, and then removes the directory.
-
-The core plugins ("help", "version", and "plugins") cannot be uninstalled.
