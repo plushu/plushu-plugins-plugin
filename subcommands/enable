@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+disabled_plugins_dir=$PLUSHU_DIR/disabled-plugins
+
+# If no plugin name was specified
+if [[ -z "$2" ]]; then
+  echo "Missing name of plugin to enable" >&2
+  exit 1
+fi
+
+# For each plugin specified
+while [[ -n "$2" ]]; do
+  # If that plugin exists and is disabled
+  if [[ -d "$disabled_plugins_dir/$2" ]]; then
+
+    # Enable the plugin
+    mv "$disabled_plugins_dir/$2" "$PLUSHU_PLUGINS_DIR/$2"
+    echo "Plugin '$2' enabled."
+
+  # If that plugin does not exist
+  else
+    echo "Disabled plugin not found: $2" >&2
+    exit 1
+  fi
+  shift
+done
