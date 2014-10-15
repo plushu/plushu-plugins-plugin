@@ -1,33 +1,33 @@
 #!/usr/bin/env bash
 set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
 
-remote=$1
-target=$2
+plugin=$1
+remote=$2
 
-target_dir=$PLUSHU_PLUGINS_DIR/$target
+plugin_dir=$PLUSHU_PLUGINS_DIR/$plugin
 
 # If the plugin doesn't already exist
-if [[ ! -e "$target_dir" ]]; then
+if [[ ! -e "$plugin_dir" ]]; then
 
   # Retrieve it
-  "$PLUSHU_ROOT/lib/plushook" retrieve-dir "$target_dir" "$remote"
+  "$PLUSHU_ROOT/lib/plushook" retrieve-dir "$plugin_dir" "$remote"
 
   # If the plugin was not downloaded
-  if [[ ! -e "$target_dir" ]]; then
+  if [[ ! -e "$plugin_dir" ]]; then
     echo "URL could not be retrieved: $remote" >&2
     exit 1
 
   # If the newly-cloned plugin has an install script
-  elif [[ -f "$PLUSHU_PLUGINS_DIR/$target/install" ]]; then
+  elif [[ -f "$PLUSHU_PLUGINS_DIR/$plugin/install" ]]; then
 
     # We don't test for executable status, we just
     # let the shell fail if the install script isn't set executable
-    PLUSHU_PLUGIN_NAME="$target" PLUSHU_PLUGIN_PATH="$target_dir" \
-      "$target_dir/install"
+    PLUSHU_PLUGIN_NAME="$plugin" PLUSHU_PLUGIN_PATH="$plugin_dir" \
+      "$plugin_dir/install"
 
   else
     # Notify that the plugin has been installed
     # in lieu of a more complex
-    echo "Plugin '$target' installed."
+    echo "Plugin '$plugin' installed."
   fi
 fi

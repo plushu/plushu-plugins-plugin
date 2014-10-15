@@ -22,21 +22,21 @@ if [[ -n $2 ]]; then
   defname=${defname#plushu-}
   defname=${defname%-plugin}
   defname=${defname%.git}
-  target=${3:-$defname}
-  target_dir="$PLUSHU_PLUGINS_DIR/$target"
+  plugin=${3:-$defname}
+  plugin_dir="$PLUSHU_PLUGINS_DIR/$plugin"
 
   # If the plugin already exists
-  if [[ -e "$target_dir" ]]; then
+  if [[ -e "$plugin_dir" ]]; then
     cat >&2 <<EOF
-Plugin '$target' is already installed.
-Use \`plushu $PLUSHU_PLUGIN_NAME:reinstall $target\` to rerun its install script,
-or \`plushu $PLUSHU_PLUGIN_NAME:uninstall $target\` first if you want to do a hard reinstall.
+Plugin '$plugin' is already installed.
+Use \`plushu $PLUSHU_PLUGIN_NAME:reinstall $plugin\` to rerun its install script,
+or \`plushu $PLUSHU_PLUGIN_NAME:uninstall $plugin\` first if you want to do a hard reinstall.
 EOF
     exit 1
 
   # If the plugin isn't already installed, install it
   else
-    "$PLUSHU_ROOT/lib/plushook" install-plugin "$remote" "$target"
+    "$PLUSHU_ROOT/lib/plushook" install-plugin "$plugin" "$remote"
   fi
 
 # If no plugin name was specified
