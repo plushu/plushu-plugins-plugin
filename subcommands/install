@@ -23,9 +23,10 @@ if [[ -n $2 ]]; then
   defname=${defname%-plugin}
   defname=${defname%.git}
   target=${3:-$defname}
+  target_dir="$PLUSHU_PLUGINS_DIR/$target"
 
   # If the plugin already exists
-  if [[ -e "$PLUSHU_PLUGINS_DIR/$target" ]]; then
+  if [[ -e "$target_dir" ]]; then
     cat >&2 <<EOF
 Plugin '$target' is already installed.
 Use \`plushu $PLUSHU_PLUGIN_NAME:reinstall $target\` to rerun its install script,
