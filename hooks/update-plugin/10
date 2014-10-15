@@ -7,7 +7,7 @@ plugin_dir="$PLUSHU_PLUGINS_DIR/$plugin"
 # If the plugin exists
 if [[ -d "$plugin_dir" ]]; then
   # Retrieve it
-  "$PLUSHU_ROOT/lib/plushook" update-dir "$plugin_dir" "$plugin" |
+  "$PLUSHU_ROOT/lib/plushook" update-dir "$plugin_dir" "$plugin" 3>&1 |
   while read -a update; do
     # If the plugin was updated
     if [[ -z "${update[1]}" ]]; then
