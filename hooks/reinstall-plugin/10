@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+plugin=$1
+plugin_dir="$PLUSHU_PLUGINS_DIR/$plugin"
+
+# If the plugin exists and has an install script
+if [[ -f "$plugin_dir/install" ]]; then
+
+  # We don't test for executable status, we just
+  # let the shell fail if the install script isn't set executable
+  PLUSHU_PLUGIN_NAME="$plugin" PLUSHU_PLUGIN_PATH="$plugin_dir" \
+    "$target_dir/install"
+fi

@@ -9,18 +9,10 @@ fi
 
 # For each plugin specified
 while [[ -n "$2" ]]; do
-  # If that plugin exists
+
+  # If that plugin exists, reinstall it
   if [[ -d "$PLUSHU_PLUGINS_DIR/$2" ]]; then
-
-    # If that plugin has an install script
-    if [[ -f "$PLUSHU_PLUGINS_DIR/$2/install" ]]; then
-
-      # We don't test for executable status, we just
-      # let the shell fail if the install script isn't set executable
-      PLUSHU_PLUGIN_NAME="$2" \
-      PLUSHU_PLUGIN_PATH="$PLUSHU_PLUGINS_DIR/$2" \
-        "$PLUSHU_PLUGINS_DIR/$2/install"
-    fi
+    "$PLUSHU_ROOT/lib/plushook" reinstall-plugin "$2"
 
   # If that plugin does not exist
   else
