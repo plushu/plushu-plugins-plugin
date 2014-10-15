@@ -10,5 +10,5 @@ if [[ -f "$plugin_dir/install" ]]; then
   # We don't test for executable status, we just
   # let the shell fail if the install script isn't set executable
   PLUSHU_PLUGIN_NAME="$plugin" PLUSHU_PLUGIN_PATH="$plugin_dir" \
-    "$target_dir/install"
+    "$plugin_dir/install"
 fi
