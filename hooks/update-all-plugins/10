@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+# Update each plugin to update
+for plugin in "$PLUSHU_PLUGINS_DIR"/*; do
+  "$PLUSHU_ROOT/lib/plushook" update-plugin "${plugin##*/}"
+done
