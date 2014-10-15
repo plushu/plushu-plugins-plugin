@@ -9,21 +9,10 @@ fi
 
 # For each plugin specified
 while [[ -n "$2" ]]; do
-  # If that plugin exists
+
+  # If that plugin exists, uninstall it
   if [[ -d "$PLUSHU_PLUGINS_DIR/$2" ]]; then
-
-    # If that plugin has an uninstall script
-    if [[ -f "$PLUSHU_PLUGINS_DIR/$2/uninstall" ]]; then
-
-      # We don't test for executable status, we just
-      # let the shell fail if the uninstall script isn't set executable
-      PLUSHU_PLUGIN_NAME="$2" PLUSHU_PLUGIN_PATH="$PLUSHU_PLUGINS_DIR/$2" \
-        "$PLUSHU_PLUGINS_DIR/$2/uninstall"
-    fi
-
-    # Remove the plugin
-    rm -rf "$PLUSHU_PLUGINS_DIR/$2"
-    echo "Plugin '$2' uninstalled."
+    "$PLUSHU_ROOT/lib/plushook" uninstall-plugin "$2"
 
   # If that plugin does not exist
   else
@@ -31,5 +20,4 @@ while [[ -n "$2" ]]; do
     exit 1
   fi
   shift
-# If no plugin name was specified
 done

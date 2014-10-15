@@ -11,12 +11,10 @@ fi
 
 # For each plugin specified
 while [[ -n "$2" ]]; do
-  # If that plugin exists and is disabled
-  if [[ -d "$disabled_plugins_dir/$2" ]]; then
 
-    # Enable the plugin
-    mv "$disabled_plugins_dir/$2" "$PLUSHU_PLUGINS_DIR/$2"
-    echo "Plugin '$2' enabled."
+  # If that plugin exists and is disabled, enable it
+  if [[ -d "$disabled_plugins_dir/$2" ]]; then
+    "$PLUSHU_ROOT/lib/plushook" enable-plugin "$2"
 
   # If that plugin does not exist
   else
