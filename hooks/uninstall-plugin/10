@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+plugin=$1
+plugin_dir=$PLUSHU_PLUGINS_DIR/$plugin
+
+# If the plugin exists
+if [[ -d "$plugin_dir" ]]; then
+
+  # If the plugin has an uninstall script
+  if [[ -f "$plugin_dir/uninstall" ]]; then
+
+    # We don't test for executable status, we just
+    # let the shell fail if the uninstall script isn't set executable
+    PLUSHU_PLUGIN_NAME="$plugin" PLUSHU_PLUGIN_PATH="$plugin_dir" \
+      "$plugin_dir/uninstall"
+  fi
+
+  # Remove the plugin
+  rm -rf "$plugin_dir"
+  echo "Plugin '$plugin' uninstalled."
+fi
