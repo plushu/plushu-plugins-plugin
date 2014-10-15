@@ -10,7 +10,7 @@ if [[ -d "$plugin_dir" ]]; then
   "$PLUSHU_ROOT/lib/plushook" update-dir "$plugin_dir" "$plugin" 3>&1 |
   while read -a update; do
     # If the plugin was updated
-    if [[ -z "${update[1]}" ]]; then
+    if [[ -n "${update[1]}" ]]; then
       # If this plugin has an update script
       if [[ -f ./update ]]; then
 
