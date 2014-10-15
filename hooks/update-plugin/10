@@ -5,7 +5,7 @@ plugin=$1
 plugin_dir="$PLUSHU_PLUGINS_DIR/$plugin"
 
 # If the plugin has a git dir to update
-if [[ -d "$plugin/.git" ]]; then
+if [[ -d "$plugin_dir/.git" ]]; then
   # Pull new revisions
   cd "$plugin_dir"
   git fetch >/dev/null 2>&1
