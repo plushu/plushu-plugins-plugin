@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+plugin=$1
+plugin_dir="$PLUSHU_PLUGINS_DIR/$plugin"
+
+# If the plugin has a git dir to update
+if [[ -d "$plugin/.git" ]]; then
+  # Pull new revisions
+  cd "$plugin_dir"
+  git fetch >/dev/null 2>&1
+  old_rev="$(git rev-parse HEAD)"
+  new_rev="$(git rev-parse @{u})"
+
+  # If there are new upstream revisions
+  if [[ "$old_rev" != "$new_rev" ]]; then
+    echo "Updating $plugin..."
+    # merge them
+    git merge @{u}
+
+    # If this plugin has an update script
+    if [[ -f ./update ]]; then
+
+      # We don't test for executable status, we just
+      # let the shell fail if the update script isn't set executable
+      PLUSHU_PLUGIN_NAME=$plugin PLUSHU_PLUGIN_PATH=$plugin_dir \
+        ./update "$old_rev" "$new_rev"
+    fi
+  else
+    echo "$plugin is up to date"
+  fi
+fi

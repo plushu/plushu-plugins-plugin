@@ -24,29 +24,7 @@ else
   plugins=("$PLUSHU_PLUGINS_DIR"/*)
 fi
 
-# For each plugin specified
-for plugin in "${plugins[@]}"; do if [[ -d "$plugin/.git" ]]; then (
-  # Pull new revisions
-  cd "$plugin"
-  git fetch >/dev/null 2>&1
-  old_rev="$(git rev-parse HEAD)"
-  new_rev="$(git rev-parse @{u})"
-
-  # If there are new upstream revisions
-  if [[ "$old_rev" != "$new_rev" ]]; then
-    echo "Updating ${plugin##*/}..."
-    # merge them
-    git merge @{u}
-
-    # If this plugin has an update script
-    if [[ -f ./update ]]; then
-
-      # We don't test for executable status, we just
-      # let the shell fail if the update script isn't set executable
-      PLUSHU_PLUGIN_NAME="${PWD##*/}" PLUSHU_PLUGIN_PATH="$PWD" \
-        ./update "$old_rev" "$new_rev"
-    fi
-  else
-    echo "${plugin##*/} is up to date"
-  fi
-) fi done
+# Update each plugin to update
+for plugin in "${plugins[@]}"; do
+  "$PLUSHU_ROOT/lib/plushook" update-plugin "${plugin##*/}"
+done
