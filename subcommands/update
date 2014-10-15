@@ -25,7 +25,5 @@ if [[ -n "$2" ]]; then
 # If no plugin name was specified
 else
   # Update ALL the plugins
-  for plugin in "${plugins[@]}"; do
-    "$PLUSHU_ROOT/lib/plushook" update-all-plugins
-  done
+  "$PLUSHU_ROOT/lib/plushook" update-all-plugins
 fi
